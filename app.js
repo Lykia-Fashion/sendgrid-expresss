@@ -1,18 +1,34 @@
-var express = require('express');
-var app = express();
+const sgMail = require('@sendgrid/mail');
 
-app.get('/', function(req, res) {
-  res.send({
-    "Output": "Hello Ronny!"
-  });
-});
+exports.handler = async (event, context, callback) => {
+  // Set your SendGrid API key
+  sgMail.setApiKey('YOUR_SENDGRID_API_KEY');
 
-app.post('/', function(req, res) {
-  res.send({
-    "Output": "Hello World!"
-  });
-});
+  // Extract the email parameters from the Lambda event
+  const { to, from, subject, text } = JSON.parse(event.body);
 
+  // Create the email message
+  const msg = {
+    to,
+    from,
+    subject,
+    text
+  };
 
-// Export your Express configuration so that it can be consumed by the Lambda handler
-module.exports = app
+  try {
+    // Send the email using the SendGrid API
+    await sgMail.send(msg);
+    const response = {
+      statusCode: 200,
+      body: JSON.stringify({ message: 'Email sent successfully' })
+    };
+    callback(null, response);
+  } catch (error) {
+    console.error('Error sending email:', error);
+    const response = {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Error sending email' })
+    };
+    callback(error, response);
+  }
+};
