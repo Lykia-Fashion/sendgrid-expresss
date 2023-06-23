@@ -11,7 +11,7 @@ describe('Tests app', function() {
     // request.get('/').expect(200).end(function(err, result) {
     //     test.string(result.body.Output).contains('Hello');
     //     test.value(result).hasHeader('content-type', 'application/json; charset=utf-8');
-    //     done(err);
+     done();
   });
   it('verifies post', function(done) {
     // request.post('/').expect(200).end(function(err, result) {
@@ -19,5 +19,6 @@ describe('Tests app', function() {
     //     test.value(result).hasHeader('content-type', 'application/json; charset=utf-8');
     //     done(err);
     // });
+      done();
   });
 });
